@@ -57,6 +57,7 @@ func TestWriteAnswer(t *testing.T) {
 	}
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp, err := ioutil.ReadAll(r.Body)
+		r.Body.Close()
 		if err != nil {
 			t.Error(err)
 		}
@@ -98,5 +99,17 @@ func TestCalculate(t *testing.T) {
 
 	if output.MulResult != outputObject.MulResult {
 		t.Error("MulResult are not equals")
+	}
+}
+
+func TestPing(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer ts.Close()
+	config := Config{ts.URL}
+	status := Ping(config)
+	if status != http.StatusOK {
+		t.Error("Status is not 200")
 	}
 }

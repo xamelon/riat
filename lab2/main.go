@@ -111,7 +111,7 @@ func main() {
 		log.Fatal(err)
 	}
 	url := fmt.Sprintf("htpp://127.0.0.1:%s/", port)
-	config := Config(url)
+	config := Config{url}
 	var status int
 	for {
 		if status != http.StatusOK {
